@@ -1,0 +1,116 @@
+@font-face {
+    font-family: "Helvetica";
+    src: url("../fonts/Helvetica.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --game-bg: rgba(255, 255, 255, 0.95);
+    --text-color: #2d3748;
+    --correct-color: #48bb78;
+    --incorrect-color: #f56565;
+    --current-color: #4299e1;
+    --description-color: #718096;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica", "Arial", sans-serif;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem;
+}
+
+.game {
+    background: var(--game-bg);
+    border-radius: 16px;
+    padding: 2.5rem 3rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+}
+
+span {
+    font-size: 2rem;
+    margin: 0 3px;
+    color: var(--text-color);
+    transition: color 0.2s ease;
+}
+
+span.correct {
+    color: var(--correct-color);
+    text-shadow: 0 0 10px rgba(72, 187, 120, 0.3);
+}
+
+span.incorrect {
+    color: var(--incorrect-color);
+    text-shadow: 0 0 10px rgba(245, 101, 101, 0.3);
+    text-decoration: underline;
+}
+
+span.current {
+    color: var(--current-color);
+    position: relative;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+span.current::after {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--current-color), #63b3ed);
+    border-radius: 2px;
+    content: "";
+    animation: cursor-blink 0.8s ease-in-out infinite;
+}
+
+.game-description {
+    color: var(--description-color);
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes cursor-blink {
+    0%, 100% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+    50% {
+        opacity: 0.3;
+        transform: scaleX(0.8);
+    }
+}
