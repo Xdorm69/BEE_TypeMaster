@@ -1,18 +1,43 @@
+/* ============================================================
+   BEE TYPEMASTER — Design tokens
+   A hive-themed typing test. The palette, shapes, and motion
+   all take their cues from honeycombs: hexagon facets, comb
+   fill patterns, and a bee that travels the progress trail.
+   ============================================================ */
+
 @font-face {
     font-family: "Helvetica";
-    src: url("../fonts/Helvetica.ttf") format("truetype");
+    src: url("fonts/Helvetica.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
 
 :root {
-    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --game-bg: rgba(255, 255, 255, 0.95);
-    --text-color: #2d3748;
-    --correct-color: #48bb78;
-    --incorrect-color: #f56565;
-    --current-color: #4299e1;
-    --description-color: #718096;
+    /* ---- Color: dark hive, honey-gold accent, comb-leaf feedback ---- */
+    --void: #14110c;           /* background — the inside of the hive */
+    --panel: #201a10;          /* card surface */
+    --panel-raised: #291f12;   /* hovered / raised surface */
+    --cell-line: #3a2c15;      /* hexagon grid lines, dividers */
+
+    --honey: #f4b93f;          /* primary accent — honey gold */
+    --honey-deep: #c9821a;     /* pressed / deep amber */
+    --honey-dim: #6b551f;      /* low-emphasis gold (inactive cells) */
+
+    --cream: #f8efd8;          /* primary text */
+    --ink: #b8a888;            /* secondary text / labels */
+    --ink-faint: #6f6248;      /* placeholder / disabled text */
+
+    --correct: #93c26d;        /* comb-leaf green */
+    --incorrect: #e2583a;      /* rust red */
+
+    /* ---- Type: geometric display, monospace typing surface ---- */
+    --font-display: "Space Grotesk", "Helvetica", sans-serif;
+    --font-type: "JetBrains Mono", "Helvetica", monospace;
+    --font-label: "Space Grotesk", "Helvetica", sans-serif;
+
+    /* ---- Shape ---- */
+    --hex-cut: 18px;           /* corner-cut size used on hex-cornered panels */
+    --radius-sm: 6px;
 }
 
 * {
@@ -22,13 +47,101 @@
 }
 
 body {
-    font-family: "Helvetica", "Arial", sans-serif;
-    background: var(--bg-gradient);
+    font-family: var(--font-label);
+    background-color: var(--void);
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(244, 185, 63, 0.06), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(244, 185, 63, 0.05), transparent 45%);
+    color: var(--cream);
     min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Faint honeycomb backdrop — a single tiled SVG hex grid, kept subtle
+   so it reads as texture rather than decoration. */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98' viewBox='0 0 56 98'%3E%3Cpath d='M28 0 L56 16 L56 49 L28 65 L0 49 L0 16 Z' fill='none' stroke='%23f4b93f' stroke-width='1'/%3E%3Cpath d='M28 65 L56 81 L56 98 L28 98 L0 98 L0 81 Z' fill='none' stroke='%23f4b93f' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* ============================================================
+   Site header — shared between the game and the auth page
+   ============================================================ */
+
+.site-header {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.75rem 1.5rem 0;
+    position: relative;
+    z-index: 1;
 }
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.brand-mark {
+    width: 34px;
+    height: 34px;
+    display: block;
+}
+
+.brand-mark polygon {
+    fill: var(--honey);
+}
+
+.brand-mark .stripe {
+    fill: var(--void);
+}
+
+.brand-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cream);
+}
+
+.brand-name span {
+    color: var(--honey);
+}
+
+.nav-link {
+    font-family: var(--font-label);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--cell-line);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-link:hover {
+    border-color: var(--honey);
+    color: var(--honey);
+}
+
+/* ============================================================
+   Game frame
+   ============================================================ */
 
 .game-frame {
     display: flex;
@@ -36,81 +149,313 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 1200px;
-    padding: 2rem;
-}
-
-.game {
-    background: var(--game-bg);
-    border-radius: 16px;
-    padding: 2.5rem 3rem;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    margin-bottom: 1.5rem;
-    line-height: 1.8;
-    letter-spacing: 0.5px;
-}
-
-span {
-    font-size: 2rem;
-    margin: 0 3px;
-    color: var(--text-color);
-    transition: color 0.2s ease;
-}
-
-span.correct {
-    color: var(--correct-color);
-    text-shadow: 0 0 10px rgba(72, 187, 120, 0.3);
-}
-
-span.incorrect {
-    color: var(--incorrect-color);
-    text-shadow: 0 0 10px rgba(245, 101, 101, 0.3);
-    text-decoration: underline;
-}
-
-span.current {
-    color: var(--current-color);
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
     position: relative;
-    animation: pulse 1s ease-in-out infinite;
+    z-index: 1;
+    min-height: calc(100vh - 90px);
 }
 
-span.current::after {
-    position: absolute;
-    bottom: -2px;
-    left: 0;
+.game-frame > .stage {
     width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--current-color), #63b3ed);
-    border-radius: 2px;
-    content: "";
-    animation: cursor-blink 0.8s ease-in-out infinite;
 }
 
-.game-description {
-    color: var(--description-color);
-    font-size: 1.1rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
+/* Difficulty chip — a small hexagon tab that sits above the card */
+.difficulty-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    align-self: flex-start;
+    margin-bottom: 0.85rem;
+    padding: 0.35rem 0.9rem 0.35rem 0.7rem;
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    opacity: 0.9;
+    color: var(--void);
+    background: var(--honey);
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%);
 }
 
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.7;
-    }
+.difficulty-chip::before {
+    content: "\2B21"; /* hexagon glyph */
+    font-size: 0.8rem;
+}
+
+/* The card itself — hex-cut corners on two opposite sides so the
+   panel silhouette reads as a hive cell, not a generic rounded box. */
+.game {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--cell-line);
+    padding: 3rem 3.25rem;
+    clip-path: polygon(
+        var(--hex-cut) 0, 100% 0,
+        100% calc(100% - var(--hex-cut)), calc(100% - var(--hex-cut)) 100%,
+        0 100%, 0 var(--hex-cut)
+    );
+    line-height: 2.1;
+    letter-spacing: 0.3px;
+    font-family: var(--font-type);
+}
+
+.game span {
+    font-size: 1.55rem;
+    color: var(--ink);
+    transition: color 0.15s ease;
+}
+
+.game span.correct {
+    color: var(--correct);
+}
+
+.game span.incorrect {
+    color: var(--incorrect);
+    text-decoration: underline;
+    text-decoration-color: var(--incorrect);
+    text-underline-offset: 4px;
+}
+
+.game span.current {
+    color: var(--cream);
+    position: relative;
+}
+
+.game span.current::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 2px;
+    background: var(--honey);
+    animation: cursor-blink 0.9s ease-in-out infinite;
 }
 
 @keyframes cursor-blink {
-    0%, 100% {
-        opacity: 1;
-        transform: scaleX(1);
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+}
+
+.game-description {
+    margin-top: 1.4rem;
+    color: var(--ink);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* ============================================================
+   Honeycomb progress trail — the signature element.
+   A row of hex cells fills gold as the paragraph is typed, and
+   a small bee glyph rides along the trail marking your position.
+   ============================================================ */
+
+.progress-trail {
+    position: relative;
+    display: flex;
+    gap: 4px;
+    margin-top: 2rem;
+    padding-top: 1.6rem;
+}
+
+.progress-cell {
+    flex: 1;
+    height: 10px;
+    background: var(--honey-dim);
+    opacity: 0.35;
+    clip-path: polygon(15% 0, 85% 0, 100% 50%, 85% 100%, 15% 100%, 0 50%);
+    transition: background 0.25s ease, opacity 0.25s ease;
+}
+
+.progress-cell.filled {
+    background: var(--honey);
+    opacity: 1;
+}
+
+.progress-bee {
+    position: absolute;
+    top: -0.35rem;
+    left: 0;
+    font-size: 1.1rem;
+    transform: translateX(-50%);
+    transition: left 0.2s ease-out;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+/* ============================================================
+   Live stats strip
+   ============================================================ */
+
+.stats-strip {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.75rem;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.stat-value {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--cream);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+}
+
+/* ============================================================
+   Results overlay — replaces the old alert() popup
+   ============================================================ */
+
+.results-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 8, 5, 0.72);
+    backdrop-filter: blur(3px);
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.results-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.results-card {
+    width: min(420px, 90vw);
+    background: var(--panel-raised);
+    border: 1px solid var(--cell-line);
+    padding: 2.5rem 2.25rem;
+    clip-path: polygon(
+        20px 0, 100% 0,
+        100% calc(100% - 20px), calc(100% - 20px) 100%,
+        0 100%, 0 20px
+    );
+    transform: translateY(12px);
+    transition: transform 0.25s ease;
+}
+
+.results-overlay.visible .results-card {
+    transform: translateY(0);
+}
+
+.results-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--honey);
+}
+
+.results-title {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin-top: 0.35rem;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.4rem;
+    margin: 1.75rem 0;
+}
+
+.results-grid .stat-value {
+    font-size: 1.8rem;
+}
+
+.results-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn {
+    font-family: var(--font-label);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    cursor: pointer;
+    clip-path: polygon(8px 0, 100% 0, 100% 100%, 8px 100%, 0 50%);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-primary {
+    background: var(--honey);
+    color: var(--void);
+}
+
+.btn-primary:hover {
+    background: #ffcb5e;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--cell-line);
+    clip-path: none;
+    border-radius: var(--radius-sm);
+}
+
+.btn-ghost:hover {
+    color: var(--cream);
+    border-color: var(--honey-dim);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 640px) {
+    .game {
+        padding: 2rem 1.5rem;
     }
-    50% {
-        opacity: 0.3;
-        transform: scaleX(0.8);
+
+    .game span {
+        font-size: 1.15rem;
+    }
+
+    .stats-strip {
+        flex-wrap: wrap;
+        row-gap: 1rem;
+    }
+
+    .site-header {
+        padding-top: 1.25rem;
+    }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .game span.current::after,
+    .progress-bee {
+        animation: none;
+        transition: none;
     }
 }
