@@ -367,6 +367,23 @@ a {
     color: var(--honey);
 }
 
+.results-title.new-highscore {
+    background: red;
+}
+
+.best-score {
+    background: var(--cell-line);
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    clip-path: polygon(
+        20px 0, 100% 0,
+        100% calc(100% - 20px), calc(100% - 20px) 100%,
+        0 100%, 0 20px
+    );
+    margin-top: 1rem;
+}
+
+
 .results-title {
     font-family: var(--font-display);
     font-size: 1.7rem;
@@ -388,6 +405,99 @@ a {
 .results-actions {
     display: flex;
     gap: 0.75rem;
+}
+
+/* ============================================================
+   New High Score
+   ============================================================ */
+
+#resultWpm.new-highscore {
+    position: relative;
+    display: inline-block;
+
+    color: var(--honey);
+
+    text-shadow:
+        0 0 8px rgba(244, 185, 63, 0.55),
+        0 0 20px rgba(244, 185, 63, 0.35);
+
+    animation: highscore-pulse 1s ease-in-out infinite;
+}
+
+
+/* NEW RECORD badge */
+#resultWpm.new-highscore::after {
+    content: "NEW RECORD";
+
+    position: absolute;
+    top: -0.7rem;
+    left: 100%;
+    margin-left: 0.6rem;
+
+    white-space: nowrap;
+
+    padding: 0.25rem 0.5rem;
+
+    font-family: var(--font-label);
+    font-size: 0.55rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+
+    color: var(--void);
+    background: var(--honey);
+
+    clip-path: polygon(
+        6px 0,
+        100% 0,
+        100% calc(100% - 6px),
+        calc(100% - 6px) 100%,
+        0 100%,
+        0 6px
+    );
+
+    animation: badge-pop 0.4s ease-out both;
+}
+
+
+/* WPM celebration */
+@keyframes highscore-pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+
+        text-shadow:
+            0 0 8px rgba(244, 185, 63, 0.55),
+            0 0 20px rgba(244, 185, 63, 0.35);
+    }
+
+    50% {
+        transform: scale(1.08);
+
+        text-shadow:
+            0 0 12px rgba(244, 185, 63, 0.8),
+            0 0 30px rgba(244, 185, 63, 0.55);
+    }
+}
+
+
+/* Badge entrance */
+@keyframes badge-pop {
+
+    0% {
+        opacity: 0;
+        transform: scale(0.7) translateY(5px);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(1.08) translateY(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .btn {
