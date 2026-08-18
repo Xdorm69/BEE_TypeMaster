@@ -139,6 +139,37 @@ class TypingGame {
       return;
     }
 
+    if (e.key === "Backspace") {
+      if (!this.started || this.currentIdx === 0) return;
+
+      // Remove current cursor
+      this.chars[this.currentIdx].element.classList.remove("current");
+
+      // Move back to previous character
+      this.currentIdx--;
+
+      const previous = this.chars[this.currentIdx];
+
+      // Undo the result of the previous character
+      if (previous.element.classList.contains("correct")) {
+          this.correctChars--;
+      } else if (previous.element.classList.contains("incorrect")) {
+          this.incorrectChars--;
+      }
+
+      // Remove previous result
+      previous.element.classList.remove("correct");
+      previous.element.classList.remove("incorrect");
+
+      // Put cursor back
+      previous.element.classList.add("current");
+
+      this._updateLiveStats();
+      this._updateProgress();
+
+      return;
+    }
+
     if (e.key.length !== 1) return; // ignore Shift, Enter, arrow keys, etc.
 
     if (!this.started) {
