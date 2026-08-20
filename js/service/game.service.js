@@ -1,34 +1,35 @@
 import { DEMO_TEXTS } from "../constants/texts.js";
+import { GameState } from "../model/game-state.model.js";
 import { ScoreDTO } from "../model/score.model.js";
 
 export class GameService {
 
     constructor() {
-        this.reset();
+        this.gameState = new GameState();
     }
 
     startGame() {
         const paragraphId = this._pickParagraphId();
         const paragraph = this._getParagraph(paragraphId);
 
-        this.paragraphId = paragraphId;
-        this.text = paragraph.text;
-        this.difficulty = paragraph.difficulty;
+        this.gameState.paragraphId = paragraphId;
+        this.gameState.text = paragraph.text;
+        this.gameState.difficulty = paragraph.difficulty;
 
         return this.getState();
     }
 
     startTyping() {
-        if (this.started) {
+        if (this.gameState.started) {
             return;
         }
 
-        this.started = true;
-        this.startTime = Date.now();
+        this.gameState.started = true;
+        this.gameState.startTime = Date.now();
     }
 
     handleCharacter(character) {
-        if (!this.started || this.isComplete()) {
+        if (!this.gameState.started || this.isComplete()) {
             return null;
         }
 
@@ -36,41 +37,53 @@ export class GameService {
             return null;
         }
 
-        const expectedCharacter = this.text[this.currentIdx];
+        const expectedCharacter = this.gameState.text[this.gameState.currentIdx];
         const isCorrect = character === expectedCharacter;
 
         if (isCorrect) {
-            this.correctChars++;
+            this.gameState.correctChars++;
         } else {
-            this.incorrectChars++;
+            this.gameState.incorrectChars++;
         }
 
         const result = {
-            index: this.currentIdx,
+            index: this.gameState.currentIdx,
             correct: isCorrect
         };
 
-        this.currentIdx++;
+        this.gameState.history.push(result);
+
+        this.gameState.currentIdx++;
 
         return result;
     }
 
     handleBackspace() {
-        if (!this.started || this.currentIdx === 0) {
-            return null;
-        }
+      if (!this.gameState.started || this.gameState.currentIdx === 0) {
+          return null;
+      }
 
-        this.currentIdx--;
+      this.gameState.currentIdx--;
 
-        return {
-            index: this.currentIdx
-        };
+      const result = this.gameState.history.pop();
+
+      if (!result) {
+          return null;
+      }
+
+      if (result.correct) {
+          this.gameState.correctChars--;
+      } else {
+          this.gameState.incorrectChars--;
+      }
+
+      return result;
     }
 
     isComplete() {
         return (
-            this.text.length > 0 &&
-            this.currentIdx >= this.text.length
+            this.gameState.text.length > 0 &&
+            this.gameState.currentIdx >= this.gameState.text.length
         );
     }
 
@@ -78,33 +91,33 @@ export class GameService {
         const seconds = this.getElapsedSeconds();
 
         const wpm = seconds > 0
-            ? (this.correctChars / 5) / (seconds / 60)
+            ? (this.gameState.correctChars / 5) / (seconds / 60)
             : 0;
 
         const attempted =
-            this.correctChars + this.incorrectChars;
+            this.gameState.correctChars + this.gameState.incorrectChars;
 
         const accuracy = attempted > 0
-            ? (this.correctChars / attempted) * 100
+            ? (this.gameState.correctChars / attempted) * 100
             : 100;
 
         return new ScoreDTO(
-            this.paragraphId,
-            this.difficulty,
+            this.gameState.paragraphId,
+            this.gameState.difficulty,
             Math.round(wpm),
             Math.round(accuracy),
-            this.correctChars,
-            this.incorrectChars,
+            this.gameState.correctChars,
+            this.gameState.incorrectChars,
             seconds
         );
     }
 
     getElapsedSeconds() {
-        if (!this.started) {
+        if (!this.gameState.started) {
             return 0;
         }
 
-        return (Date.now() - this.startTime) / 1000;
+        return (Date.now() - this.gameState.startTime) / 1000;
     }
 
     getWpm() {
@@ -115,44 +128,44 @@ export class GameService {
         }
 
         return Math.round(
-            (this.correctChars / 5) /
+            (this.gameState.correctChars / 5) /
             (seconds / 60)
         );
     }
 
     getAccuracy() {
         const attempted =
-            this.correctChars + this.incorrectChars;
+            this.gameState.correctChars + this.gameState.incorrectChars;
 
         if (attempted === 0) {
             return 100;
         }
 
         return Math.round(
-            (this.correctChars / attempted) * 100
+            (this.gameState.correctChars / attempted) * 100
         );
     }
 
     getProgress() {
-        if (this.text.length === 0) {
+        if (this.gameState.text.length === 0) {
             return 0;
         }
 
-        return this.currentIdx / this.text.length;
+        return this.gameState.currentIdx / this.gameState.text.length;
     }
 
     getState() {
         return {
-            paragraphId: this.paragraphId,
-            text: this.text,
-            difficulty: this.difficulty,
+            paragraphId: this.gameState.paragraphId,
+            text: this.gameState.text,
+            difficulty: this.gameState.difficulty,
 
-            currentIdx: this.currentIdx,
+            currentIdx: this.gameState.currentIdx,
 
-            correctChars: this.correctChars,
-            incorrectChars: this.incorrectChars,
+            correctChars: this.gameState.correctChars,
+            incorrectChars: this.gameState.incorrectChars,
 
-            started: this.started,
+            started: this.gameState.started,
 
             wpm: this.getWpm(),
             accuracy: this.getAccuracy(),
@@ -161,16 +174,7 @@ export class GameService {
     }
 
     reset() {
-        this.started = false;
-        this.currentIdx = 0;
-        this.startTime = 0;
-
-        this.correctChars = 0;
-        this.incorrectChars = 0;
-
-        this.text = "";
-        this.paragraphId = -1;
-        this.difficulty = "";
+        this.gameState.reset();
     }
 
     _pickParagraphId() {
@@ -183,13 +187,4 @@ export class GameService {
         return DEMO_TEXTS[id];
     }
 
-    undoCharacter(index, wasCorrect) {
-    if (wasCorrect) {
-        this.correctChars--;
-    } else {
-        this.incorrectChars--;
-    }
-
-    this.currentIdx = index;
-}
 }

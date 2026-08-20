@@ -243,11 +243,6 @@ export class GameController {
             return;
         }
 
-        const wasCorrect =
-            character.element
-                .classList
-                .contains("correct");
-
         const result =
             this.gameService.handleBackspace();
 
@@ -255,29 +250,9 @@ export class GameController {
             return;
         }
 
-        this.gameService.undoCharacter(
-            currentIndex,
-            wasCorrect
-        );
-
-        character.element.classList.remove(
-            "correct"
-        );
-
-        character.element.classList.remove(
-            "incorrect"
-        );
-
-        this.chars.forEach(
-            char =>
-                char.element.classList.remove(
-                    "current"
-                )
-        );
-
-        character.element.classList.add(
-            "current"
-        );
+        character.element.classList.remove("correct");
+        character.element.classList.remove("incorrect");
+        character.element.classList.add("current");
 
         const state =
             this.gameService.getState();

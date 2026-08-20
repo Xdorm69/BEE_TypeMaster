@@ -7,7 +7,6 @@ export class HighScoreService {
 
     create(scoreDTO) {
         ScoreValidator.score(scoreDTO);
-
         return this.repository.save(scoreDTO);
     }
 

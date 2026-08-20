@@ -7,11 +7,7 @@ export class HighScoreRepository {
     }
 
     getAll() {
-        const highscores = Store.get(this.storageKey);
-
-        return Array.isArray(highscores)
-            ? highscores
-            : [];
+        return Store.get(this.storageKey);
     }
 
     save(scoreDTO) {
