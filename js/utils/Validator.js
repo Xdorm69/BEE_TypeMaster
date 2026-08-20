@@ -17,6 +17,13 @@ export class Validator {
 
         //make sure password contains nums and alpha with special
         this._password(u.password);
+
+        return {
+            username: u.username,
+            email: u.email,
+            password: u.password,
+            avatarUrl: u.avatarUrl || null
+        }
         
     }
 

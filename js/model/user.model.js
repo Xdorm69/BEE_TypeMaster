@@ -1,0 +1,27 @@
+export class User {
+    constructor(id, username, email, password, avatarUrl) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.avatarUrl = avatarUrl;
+    }
+    getId() {return this.id;}
+    getUsername() {return this.username;}
+    getEmail() {return this.email;}
+    getPassword() {return this.password;}
+    getAvatarUrl() {return this.avatarUrl;}
+
+    setId(id) {this.id = id;}
+    setUsername(username) {this.username = username;}
+    setEmail(email) {this.email = email;}
+    setPassword(password) {this.password = password;}
+    setAvatarUrl(avatarUrl) {this.avatarUrl = avatarUrl;}
+}
+
+export class UserDTO extends User {
+    constructor(username, email, password, avatarUrl) {
+        super(null, username, email, password, avatarUrl);
+    }
+}
+

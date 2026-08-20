@@ -1,5 +1,6 @@
-import { User } from "../../model/userModel.js";
-import { Validator } from "../Validator.js";
+import { User } from "../../model/user.model";
+import { Validator } from "../validator";
+
 
 const user = new User("John", "john@example.com", "Password12!", "avatar.png");
 console.log("Test 1: good obj");
