@@ -1,11 +1,14 @@
-import { HighscoreRepository } from "./repository/highscore.repository.js";
-import { TypingGame } from "./service/game.service.js";
-import { HighScoreService } from "./service/highscore.service.js";
+import { GameController } from "./controllers/game.controller.js";
+import { HighScoreRepository } from "./repository/highScore.repository.js";
+import { GameService } from "./service/game.service.js";
+import { HighScoreService } from "./service/highScore.service.js";
 
-const scoreRepository = new HighscoreRepository();
+const scoreRepository = new HighScoreRepository();
 const scoreService = new HighScoreService(scoreRepository);
 
-const game = new TypingGame({
+const gameService = new GameService();
+
+const gameController = new GameController({
   gameBody: document.querySelector("#gameBody"),
   gameDescription: document.querySelector("#gameDescription"),
   difficultyChip: document.querySelector("#difficultyChip"),
@@ -22,6 +25,9 @@ const game = new TypingGame({
   resultIncorrect: document.querySelector("#resultIncorrect"),
   resultBestScore: document.querySelector("#resultBestScore"),
   nextRunBtn: document.querySelector("#nextRunBtn")
-}, scoreService);
+},
+gameService,
+scoreService
+)
 
-game.start();
+gameController.start();

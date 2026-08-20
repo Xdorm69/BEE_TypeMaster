@@ -1,34 +1,75 @@
 import { Store } from "../utils/store.js";
 
-export class HighscoreRepository {
+export class HighScoreRepository {
 
-    constructor () {
-        this.storageKey = "highscore";
+    constructor() {
+        this.storageKey = "Highscore";
     }
 
     getAll() {
-        return Store.get(this.storageKey);
+        const highscores = Store.get(this.storageKey);
+
+        return Array.isArray(highscores)
+            ? highscores
+            : [];
     }
-    
+
     save(scoreDTO) {
         const highscores = this.getAll();
-        highscores.push(scoreDTO);
-        Store.save(this.storageKey, highscores);
-    }
-    
-    update(userId, paragraphId, highscoreDTO) {
-        const highscores = this.getAll();
-        const userHighscores = highscores.find(h => h.userId === userId);
 
-        if (userHighscores) {
-            userHighscores.paragraphs[paragraphId] = highscoreDTO;
+        const existingIndex = highscores.findIndex(
+            score => score.paragraphId === scoreDTO.paragraphId
+        );
+
+        // No score exists for this paragraph yet
+        if (existingIndex === -1) {
+            highscores.push(scoreDTO);
+            Store.save(this.storageKey, highscores);
+            return scoreDTO;
         }
 
-        Store.save(this.storageKey, highscores);
+        const existingScore = highscores[existingIndex];
+
+        // Only keep the better WPM
+        if (scoreDTO.wpm > existingScore.wpm) {
+            highscores[existingIndex] = scoreDTO;
+
+            Store.save(this.storageKey, highscores);
+
+            return scoreDTO;
+        }
+
+        // Existing score is already better
+        return existingScore;
     }
-    
-    getByUserId(userId) {
+
+    getBestByParagraphId(paragraphId) {
+        return this.getAll().find(
+            score => score.paragraphId === paragraphId
+        ) || null;
+    }
+
+    update(userId, paragraphId, highscoreDTO) {
         const highscores = this.getAll();
-        return highscores.find(highscore => highscore.userId === userId);
+
+        const userHighscores = highscores.find(
+            highscore => highscore.userId === userId
+        );
+
+        if (!userHighscores) {
+            return null;
+        }
+
+        userHighscores.paragraphs[paragraphId] = highscoreDTO;
+
+        Store.save(this.storageKey, highscores);
+
+        return highscoreDTO;
+    }
+
+    getByUserId(userId) {
+        return this.getAll().find(
+            highscore => highscore.userId === userId
+        ) || null;
     }
 }

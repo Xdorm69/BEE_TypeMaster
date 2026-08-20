@@ -1,11 +1,25 @@
 export class Store {
+
     static save(key, value) {
-        const data = localStorage.setItem(key, JSON.stringify(value));
-        return JSON.parse(data) || [];
+        localStorage.setItem(key, JSON.stringify(value));
+        return value;
     }
+
     static get(key) {
-        return localStorage.getItem(key);
+        const data = localStorage.getItem(key);
+
+        if (data === null) {
+            return [];
+        }
+
+        try {
+            return JSON.parse(data);
+        } catch (error) {
+            console.error(`Failed to parse stored data for key "${key}"`, error);
+            return [];
+        }
     }
+
     static remove(key) {
         localStorage.removeItem(key);
     }

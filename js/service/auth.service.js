@@ -1,6 +1,6 @@
 import { UserDTO } from "../model/user.model.js";
 import { Store } from "../utils/store.js";
-import { Validator } from "../utils/validator.js";
+import { UserValidator } from "../validators/user.validator.js";
 
 export class Auth {
     /**
@@ -13,10 +13,7 @@ export class Auth {
     }
 
     async login(userDTO) {
-        if (!(userDTO instanceof UserDTO)) {
-            throw new Error("Invalid user data");
-        }
-        Validator.user(userDTO);
+        UserValidator.user(userDTO);
         
         const user = this.userService.getByEmail(userDTO.email);
 
@@ -30,11 +27,7 @@ export class Auth {
     }
 
     async register(userDTO) {
-        if (!(userDTO instanceof UserDTO)) {
-            throw new Error("Invalid user data");
-        }
-
-        Validator.user(userDTO);
+        UserValidator.user(userDTO);
 
         const existingUser = this.userService.getByEmail(userDTO.email);
         

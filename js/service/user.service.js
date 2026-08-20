@@ -1,5 +1,5 @@
 import { Generator } from "../utils/generator.js";
-import { Validator } from "../utils/Validator.js";
+import { UserValidator } from "../validators/user.validator.js";
 
 export class UserService {    
     constructor(userRepository) {
@@ -18,7 +18,7 @@ export class UserService {
     }
 
     async create(userDTO) {
-        const user = Validator.user(userDTO);
+        const user = UserValidator.user(userDTO);
         user.id = Generator.id();
         return this.userRepository.create(user);
     }
@@ -30,7 +30,7 @@ export class UserService {
             throw new Error('User not found');
         }
         
-        Validator.user(user);
+        UserValidator.user(user);
         return this.userRepository.update(userId, user);
     }
 
