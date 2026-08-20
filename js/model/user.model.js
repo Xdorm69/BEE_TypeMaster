@@ -19,9 +19,31 @@ export class User {
     setAvatarUrl(avatarUrl) {this.avatarUrl = avatarUrl;}
 }
 
-export class UserDTO extends User {
+export class UserDTO {
     constructor(username, email, password, avatarUrl) {
-        super(null, username, email, password, avatarUrl);
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.avatarUrl = avatarUrl;
     }
+    getUsername() { return this.username; }
+    getEmail() { return this.email; }
+    getPassword() { return this.password; }
+    getAvatarUrl() { return this.avatarUrl; }
+
+}
+
+export class UserReponseDTO {
+    constructor(user) {
+        this.id = user.id;
+        this.username = user.username;
+        this.email = user.email;
+        this.avatarUrl = user.avatarUrl;
+    }
+
+    getId() { return this.id; }
+    getUsername() { return this.username; }
+    getEmail() { return this.email; }
+    getAvatarUrl() { return this.avatarUrl; }
 }
 

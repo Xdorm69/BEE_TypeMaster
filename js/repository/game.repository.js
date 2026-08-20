@@ -1,4 +1,4 @@
-import { Store } from "../utils/store";
+import { Store } from "../utils/store.js";
 
 export class GameRepository {
     constructor() {
@@ -6,9 +6,7 @@ export class GameRepository {
     }
 
     getAll() {
-        let games = Store.get(this.storageKey);
-        games = games ? JSON.parse(games) : [];
-        return games;
+        return Store.get(this.storageKey);
     }
     
     save(userId, game) {

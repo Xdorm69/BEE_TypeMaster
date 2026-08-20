@@ -1,21 +1,40 @@
 export class Score {
-    constructor(wpm, accuracy, time) {
+    constructor(paragraphId, difficulty, wpm, accuracy, correct, incorrect, time) {
+        this.paragraphId = paragraphId;
+        this.difficulty = difficulty;
         this.wpm = wpm;
         this.accuracy = accuracy;
+        this.correct = correct;
+        this.incorrect = incorrect;
         this.time = time;
     }
     
     getWpm() {return this.wpm;}
     getAccuracy() {return this.accuracy;}
     getTime() {return this.time;}
+    getParagraphId() {return this.paragraphId;}
+    getDifficulty() {return this.difficulty;}
+    getCorrect() {return this.correct;}
+    getIncorrect() {return this.incorrect;}
     
-    setWpm(wpm) {this.wpm = wpm;}
-    setAccuracy(accuracy) {this.accuracy = accuracy;}
-    setTime(time) {this.time = time;}
 }
 
-export class ScoreDTO extends Score {
-    constructor(wpm, accuracy, time) {
-        super(wpm, accuracy, time);
+export class ScoreDTO  {
+    constructor(paragraphId, difficulty, wpm, accuracy, correct, incorrect, time) {
+        this.paragraphId = paragraphId;
+        this.difficulty = difficulty;
+        this.wpm = wpm;
+        this.accuracy = accuracy;
+        this.correct = correct;
+        this.incorrect = incorrect;
+        this.time = time;
     }
+    
+    getWpm() {return this.wpm;}
+    getAccuracy() {return this.accuracy;}
+    getTime() {return this.time;}
+    getParagraphId() {return this.paragraphId;}
+    getDifficulty() {return this.difficulty;}
+    getCorrect() {return this.correct;}
+    getIncorrect() {return this.incorrect;}
 }

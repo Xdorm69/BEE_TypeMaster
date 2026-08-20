@@ -1,4 +1,4 @@
-import { Store } from "../utils/store";
+import { Store } from "../utils/store.js";
 
 export class HighscoreRepository {
 
@@ -7,14 +7,12 @@ export class HighscoreRepository {
     }
 
     getAll() {
-        let highscores = Store.get(this.storageKey);
-        highscores = highscores ? JSON.parse(highscores) : [];
-        return highscores;
+        return Store.get(this.storageKey);
     }
     
-    save(highscoreDTO) {
+    save(scoreDTO) {
         const highscores = this.getAll();
-        highscores.push(highscoreDTO);
+        highscores.push(scoreDTO);
         Store.save(this.storageKey, highscores);
     }
     

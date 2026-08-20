@@ -1,4 +1,5 @@
 import { DEMO_TEXTS } from "../constants/texts.js";
+import { Store } from "../utils/store.js";
 
 const PROGRESS_CELL_COUNT = 24;
 
@@ -7,8 +8,9 @@ export class TypingGame {
    * @param {Object} refs
    */
   
-  constructor(refs) {
+  constructor(refs, scoreService) {
     this.refs = refs;
+    this.scoreService = scoreService;
 
     // Run state
     this.started = false;
@@ -52,6 +54,7 @@ export class TypingGame {
   _getParagraph(id) {
     return DEMO_TEXTS[id];
   }
+
   _pickParagraphId() {
     return Math.floor(Math.random() * DEMO_TEXTS.length);
   }
@@ -209,11 +212,12 @@ export class TypingGame {
       wpm: Math.round(wpm),
       accuracy: Math.round(accuracy),
       correct: this.correctChars,
-      incorrect: this.incorrectChars
+      incorrect: this.incorrectChars,
+      time: seconds
     };
 
     const isNewHighScore = this._isNewHighScore(score.wpm);
-    this._saveScoreToLocalStorage(score);
+    this.scoreService.create(score);
 
     this.refs.resultsDifficulty.textContent = `${this.difficulty} hive cleared`;
     this.refs.resultWpm.textContent = wpm.toFixed(0);
@@ -255,7 +259,7 @@ export class TypingGame {
       highScores.push(score);
     }
 
-    localStorage.setItem("Highscore", JSON.stringify(highScores));
+    Store.save("Highscore", highScores);
   }
 
   _isNewHighScore(wpm) {
@@ -274,16 +278,7 @@ export class TypingGame {
   }
 
   _getHighScoresFromLocalStorage() {
-    const data = localStorage.getItem("Highscore");
-
-    if (!data) return [];
-
-    try {
-      return JSON.parse(data);
-    } catch (error) {
-      console.error("Invalid highscore data:", error);
-      return [];
-    }
+    return Store.get("Highscore");
   }
 
   _showResults() {

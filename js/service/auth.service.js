@@ -1,4 +1,3 @@
-import { AuthDTO } from "../model/auth.model.js";
 import { UserDTO } from "../model/user.model.js";
 import { Store } from "../utils/store.js";
 import { Validator } from "../utils/validator.js";
@@ -26,7 +25,7 @@ export class Auth {
         }
 
         Store.save("currentUser", user);
-        
+
         return user;
     }
 

@@ -1,4 +1,4 @@
-import { Store } from "../utils/store";
+import { Store } from "../utils/store.js";
 
 
 export class UserRepository {
@@ -7,9 +7,7 @@ export class UserRepository {
     }
     
     getAll() {
-        let users = Store.get(this.storageKey);
-        users = users ? JSON.parse(users) : [];
-        return users;
+        return Store.get(this.storageKey);
     }
 
     getById(id) {

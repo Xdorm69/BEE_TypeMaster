@@ -1,4 +1,9 @@
-import { TypingGame } from "./service/gameService.js";
+import { HighscoreRepository } from "./repository/highscore.repository.js";
+import { TypingGame } from "./service/game.service.js";
+import { HighScoreService } from "./service/highscore.service.js";
+
+const scoreRepository = new HighscoreRepository();
+const scoreService = new HighScoreService(scoreRepository);
 
 const game = new TypingGame({
   gameBody: document.querySelector("#gameBody"),
@@ -17,6 +22,6 @@ const game = new TypingGame({
   resultIncorrect: document.querySelector("#resultIncorrect"),
   resultBestScore: document.querySelector("#resultBestScore"),
   nextRunBtn: document.querySelector("#nextRunBtn")
-});
+}, scoreService);
 
 game.start();

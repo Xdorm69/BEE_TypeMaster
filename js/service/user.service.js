@@ -1,6 +1,5 @@
-import { User, UserDTO } from "../model/user.model";
-import { Generator } from "../utils/generator";
-import { Validator } from "../utils/validator";
+import { Generator } from "../utils/generator.js";
+import { Validator } from "../utils/Validator.js";
 
 export class UserService {    
     constructor(userRepository) {
@@ -19,34 +18,27 @@ export class UserService {
     }
 
     async create(userDTO) {
-        if (!userDTO) throw new Error('User data is required');
-        if (!(userDTO instanceof UserDTO)) throw new Error('User data must be an instance of UserDTO');
-
         const user = Validator.user(userDTO);
         user.id = Generator.id();
-
         return this.userRepository.create(user);
     }
 
-    async update(id, user) {
-        if (!id) {
-            throw new Error('ID is required');
-        }
-        if (!this.userRepository.getById(id)) {
+    async update(userId, user) {
+        if (!userId) throw new Error('User ID is required');
+
+        if (!this.userRepository.getById(userId)) {
             throw new Error('User not found');
         }
-        if (!user) throw new Error('User data is required');
-        if (!(user instanceof User)) throw new Error('User data must be an instance of User');
-
+        
         Validator.user(user);
-        return this.userRepository.update(id, user);
+        return this.userRepository.update(userId, user);
     }
 
-    async delete(id) {
-        if (!id) {
-            throw new Error('ID is required');
+    async delete(userId) {
+        if (!userId) {
+            throw new Error('User ID is required');
         }
-        if (!this.userRepository.getById(id)) {
+        if (!this.userRepository.getById(userId)) {
             throw new Error('User not found');
         }
         return this.userRepository.delete(id);
@@ -54,7 +46,7 @@ export class UserService {
 
     async getByEmail(email) {
         if (!email) throw new Error('Email is required');
-        
+
         const user = this.userRepository.getByEmail(email);
         if (!user) throw new Error('User not found');
 
