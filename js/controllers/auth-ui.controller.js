@@ -14,7 +14,7 @@ export class AuthUIController {
              await this.authService.getCurrentUser();
 
         
-        if (user.length == 0) {
+        if (!user) {
             this.renderLoggedOut();
             return;
         }

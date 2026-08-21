@@ -11,12 +11,11 @@ export class HistoryRepository {
 
     getByUserId(userId, limit) {
         const allHistory = this.getAll();
-
-        const history = allHistory.filter((item) => item.userId === userId);
+        const data = allHistory.find((item) => item.userId === userId);
         
-        if (!limit) return history;
+        if (!limit) return data?.history;
 
-        return history.slice(0, limit);
+        return data?.history.slice(0, limit);
     }
 
     add(userId, scoreDTO) {
@@ -50,8 +49,8 @@ export class HistoryRepository {
             });
         }
 
-        Store.set(this.storageKey, allHistory);
+        Store.save(this.storageKey, allHistory);
         
-        return allHistory[existingRecordIndex] || allHistory[allHistory.length - 1];
+        return allHistory[existingRecordIndex]?.history || allHistory[allHistory.length - 1].history;
     }
 }

@@ -50,9 +50,13 @@ export class HistoryService {
         return data;
     }
 
-    add(scoreDTO) {
+    async add(userId, scoreDTO) {
         ScoreValidator.score(scoreDTO);
-        const history = this.historyRepository.add(scoreDTO);
+
+        const currentUser = await this.authService.getCurrentUser();
+        if (!currentUser) throw new Error("History of unatuenticated is not available");
+        
+        const history = this.historyRepository.add(userId, scoreDTO);
         return history;
     }
 }
