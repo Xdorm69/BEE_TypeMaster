@@ -13,27 +13,6 @@ import { GameController } from "./controllers/game.controller.js";
 import { AuthUIController } from "./controllers/auth-ui.controller.js";
 
 
-// =========================
-// GAME
-// =========================
-
-const scoreRepository =
-    new HighScoreRepository();
-
-const scoreService =
-    new HighScoreService(scoreRepository);
-
-
-const historyRepository =
-    new HistoryRepository();
-
-const historyService =
-    new HistoryService(historyRepository);
-
-
-const gameService =
-    new GameService();
-
 
 // =========================
 // AUTH
@@ -53,6 +32,27 @@ const authService =
         userService,
         authRepository
     );
+
+// =========================
+// GAME
+// =========================
+
+const scoreRepository =
+    new HighScoreRepository();
+
+const scoreService =
+    new HighScoreService(scoreRepository);
+
+
+const historyRepository =
+    new HistoryRepository();
+
+const historyService =
+    new HistoryService(historyRepository, authService);
+
+
+const gameService =
+    new GameService();
 
 
 // =========================

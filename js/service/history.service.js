@@ -1,13 +1,18 @@
 import { ScoreValidator } from "../validators/score.validator.js";
 
 export class HistoryService {
-    constructor(historyRepository) {
+    constructor(historyRepository, authService) {
         this.historyRepository = historyRepository;
+        this.authService = authService;
     }
 
-    getRecent() {
+    async getRecent() {
+        const currentUser = await this.authService.getCurrentUser();
+        
+        if (!currentUser) throw new Error("History of unatuenticated is not available");
+        
         // tops 
-        const history = this.historyRepository.getRecent();
+        const history = this.historyRepository.getByUserId(currentUser.id);
 
         //explicit properties to add 
         // totalGames 

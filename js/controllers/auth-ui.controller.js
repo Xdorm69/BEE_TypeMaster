@@ -13,8 +13,7 @@ export class AuthUIController {
         const user =
              await this.authService.getCurrentUser();
 
-        console.log(user);
-
+        
         if (user.length == 0) {
             this.renderLoggedOut();
             return;
