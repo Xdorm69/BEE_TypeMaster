@@ -28,6 +28,11 @@
     --font-type: "JetBrains Mono", "Helvetica", monospace;
     --font-label: "Space Grotesk", "Helvetica", sans-serif;
 
+    /* TEXT COLORS */
+    --text-primary: #f8efd8;
+    --text-secondary: #b8a888;
+    --text-faint: #8f7f5e;
+
     /* ---- Shape ---- */
     --hex-cut: 18px;           /* corner-cut size used on hex-cornered panels */
     --radius-sm: 6px;
@@ -113,6 +118,11 @@ a {
 
 .brand-name span {
     color: var(--honey);
+}
+
+.nav-links {
+    display: flex;
+    gap: 1rem;
 }
 
 .nav-link {

@@ -1,12 +1,17 @@
 import { HighScoreRepository } from "./repository/high-score.repository.js";
+import { HistoryRepository } from "./repository/history.repository.js";
 
 import { GameService } from "./service/game.service.js";
 import { HighScoreService } from "./service/high-score.service.js";
+import { HistoryService } from "./service/history.service.js";
 
 import { GameController } from "./controllers/game.controller.js";
 
 const scoreRepository = new HighScoreRepository();
 const scoreService = new HighScoreService(scoreRepository);
+
+const historyRepository = new HistoryRepository();
+const historyService = new HistoryService(historyRepository);
 
 const gameService = new GameService();
 const gameController = new GameController({
@@ -28,7 +33,8 @@ const gameController = new GameController({
   nextRunBtn: document.querySelector("#nextRunBtn")
 },
 gameService,
-scoreService
+scoreService,
+historyService
 )
 
 gameController.start();

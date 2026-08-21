@@ -31,6 +31,7 @@ export class ScoreValidator {
         }
 
         if (scoreDTO.time < 0) throw new Error("Time cannot be negative");
+        if (!(scoreDTO.date instanceof Date)) throw new Error("Date must be a Date object");
         if (scoreDTO.correct < 0) throw new Error("Correct count cannot be negative");
         if (scoreDTO.incorrect < 0) throw new Error("Incorrect count cannot be negative");
 

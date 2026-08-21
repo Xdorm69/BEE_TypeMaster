@@ -108,7 +108,8 @@ export class GameService {
             Math.round(accuracy),
             this.gameState.correctChars,
             this.gameState.incorrectChars,
-            seconds
+            seconds,
+            new Date()
         );
     }
 

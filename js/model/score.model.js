@@ -20,7 +20,7 @@ export class Score {
 }
 
 export class ScoreDTO  {
-    constructor(paragraphId, difficulty, wpm, accuracy, correct, incorrect, time) {
+    constructor(paragraphId, difficulty, wpm, accuracy, correct, incorrect, time, date) {
         this.paragraphId = paragraphId;
         this.difficulty = difficulty;
         this.wpm = wpm;
@@ -28,6 +28,7 @@ export class ScoreDTO  {
         this.correct = correct;
         this.incorrect = incorrect;
         this.time = time;
+        this.date = date;
     }
     
     getWpm() {return this.wpm;}
@@ -37,4 +38,5 @@ export class ScoreDTO  {
     getDifficulty() {return this.difficulty;}
     getCorrect() {return this.correct;}
     getIncorrect() {return this.incorrect;}
+    getDate() {return this.date;}
 }

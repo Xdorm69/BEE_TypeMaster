@@ -7,12 +7,14 @@ export class GameController {
       @param {Object} refs - DOM element references
       @param {Object} gameService - Game service instance
       @param {Object} scoreService - Score service instance
+      @param {Object} historyService - History service instance
     */
 
-    constructor(refs, gameService, scoreService) {
+    constructor(refs, gameService, scoreService, historyService) {
         this.refs = refs;
         this.gameService = gameService;
         this.scoreService = scoreService;
+        this.historyService = historyService;
 
         this.chars = [];
 
@@ -282,6 +284,14 @@ export class GameController {
             );
         } catch (error) {
             console.error("Failed to save score:", error);
+        }
+
+        try {
+            this.historyService.add(
+                scoreDTO
+            );
+        } catch (error) {
+            console.error("Failed to save history:", error);
         }
 
         this._renderResults(
