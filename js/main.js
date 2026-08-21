@@ -1,13 +1,14 @@
-import { GameController } from "./controllers/game.controller.js";
-import { HighScoreRepository } from "./repository/highScore.repository.js";
+import { HighScoreRepository } from "./repository/high-score.repository.js";
+
 import { GameService } from "./service/game.service.js";
-import { HighScoreService } from "./service/highScore.service.js";
+import { HighScoreService } from "./service/high-score.service.js";
+
+import { GameController } from "./controllers/game.controller.js";
 
 const scoreRepository = new HighScoreRepository();
 const scoreService = new HighScoreService(scoreRepository);
 
 const gameService = new GameService();
-
 const gameController = new GameController({
   gameBody: document.querySelector("#gameBody"),
   gameDescription: document.querySelector("#gameDescription"),

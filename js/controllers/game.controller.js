@@ -3,6 +3,11 @@ import { ScoreDTO } from "../model/score.model.js";
 const PROGRESS_CELL_COUNT = 24;
 
 export class GameController {
+    /*
+      @param {Object} refs - DOM element references
+      @param {Object} gameService - Game service instance
+      @param {Object} scoreService - Score service instance
+    */
 
     constructor(refs, gameService, scoreService) {
         this.refs = refs;
