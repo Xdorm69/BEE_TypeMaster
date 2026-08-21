@@ -271,9 +271,13 @@ export class GameController {
                 scoreDTO.getWpm()
             );
 
-        this.scoreService.create(
-            scoreDTO
-        );
+        try {
+            this.scoreService.create(
+                scoreDTO
+            );
+        } catch (error) {
+            console.error("Failed to save score:", error);
+        }
 
         this._renderResults(
             scoreDTO,
