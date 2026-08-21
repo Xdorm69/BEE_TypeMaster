@@ -41,15 +41,14 @@ export class UserService {
         if (!this.userRepository.getById(userId)) {
             throw new Error('User not found');
         }
-        return this.userRepository.delete(id);
+        return this.userRepository.delete(userId);
     }
 
     async getByEmail(email) {
-        if (!email) throw new Error('Email is required');
+        if (!email) {
+            throw new Error("Email is required");
+        }
 
-        const user = this.userRepository.getByEmail(email);
-        if (!user) throw new Error('User not found');
-
-        return user;
+        return this.userRepository.getByEmail(email);
     }
 }

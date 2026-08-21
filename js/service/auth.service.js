@@ -1,52 +1,57 @@
-import { UserDTO } from "../model/user.model.js";
-import { Store } from "../utils/store.js";
+
+import { UserResponseDTO } from "../model/user.model.js";
 import { UserValidator } from "../validators/user.validator.js";
 
-export class Auth {
-    /**
-     * @param {Object} user
-     */
-
-    constructor(userService) {
-        this.storageKey = "users";
+export class AuthService {
+    constructor(userService, authRepository) {
         this.userService = userService;
+        this.authRepository = authRepository;
     }
 
     async login(userDTO) {
-        UserValidator.user(userDTO);
-        
-        const user = this.userService.getByEmail(userDTO.email);
+        UserValidator.login(userDTO);
+
+        const user =
+            await this.userService.getByEmail(userDTO.email);
+
+        if (!user) {
+            throw new Error("User not found");
+        }
 
         if (user.password !== userDTO.password) {
             throw new Error("Invalid password");
         }
 
-        Store.save("currentUser", user);
+        const userResponseDTO = new UserResponseDTO(user);
+        this.authRepository.setCurrentUser(userResponseDTO);
 
-        return user;
+        return userResponseDTO;
     }
 
     async register(userDTO) {
         UserValidator.user(userDTO);
 
-        const existingUser = this.userService.getByEmail(userDTO.email);
-        
+        const existingUser =
+            await this.userService.getByEmail(userDTO.email);
+
         if (existingUser) {
             throw new Error("User already exists");
         }
 
-        const user = this.userService.create(userDTO);
+        const user =
+            await this.userService.create(userDTO);
 
-        Store.save("currentUser", user);
+        const userResponseDTO = new UserResponseDTO(user);
+        this.authRepository.setCurrentUser(userResponseDTO);
 
-        return user;
+        return userResponseDTO;
     }
 
+    async getCurrentUser() {
+        return this.authRepository.getCurrentUser();
+    }
+    
     async logout() {
-        Store.remove("currentUser");
+        this.authRepository.clearCurrentUser();
     }
 }
-
-
-
-

@@ -20,7 +20,7 @@ export class User {
 }
 
 export class UserDTO {
-    constructor(username, email, password, avatarUrl) {
+    constructor({username, email, password, avatarUrl}) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -31,9 +31,27 @@ export class UserDTO {
     getPassword() { return this.password; }
     getAvatarUrl() { return this.avatarUrl; }
 
+    setUsername(username) { this.username = username; }
+    setEmail(email) { this.email = email; }
+    setPassword(password) { this.password = password; }
+    setAvatarUrl(avatarUrl) { this.avatarUrl = avatarUrl; }
+
 }
 
-export class UserReponseDTO {
+export class LoginDTO {
+    constructor({email, password}) {
+        this.email = email;
+        this.password = password;
+    }
+    getEmail() { return this.email; }
+    getPassword() { return this.password; }
+
+    setEmail(email) { this.email = email; }
+    setPassword(password) { this.password = password; }
+
+}
+
+export class UserResponseDTO {
     constructor(user) {
         this.id = user.id;
         this.username = user.username;
