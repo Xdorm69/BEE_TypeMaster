@@ -1,37 +1,43 @@
 import { ScoreValidator } from "../validators/score.validator.js";
 
 export class HistoryService {
-    constructor(historyRepository) {
+    constructor(historyRepository, authService) {
         this.historyRepository = historyRepository;
+        this.authService = authService;
     }
 
-    getRecent() {
-        // tops 
-        const history = this.historyRepository.getRecent();
+    async getRecent() {
+        const currentUser = await this.authService.getCurrentUser();
 
-        //explicit properties to add 
-        // totalGames 
+        if (!currentUser) throw new Error("History of unauthenticated user is not available");
+
+        const history = this.historyRepository.getByUserId(currentUser.id);
+
         const totalGames = history.length;
 
-        //best wpm
+        // Guard against an empty history so we don't hand back
+        // Math.max() === -Infinity or 0/0 === NaN to the UI.
+        if (totalGames === 0) {
+            return {
+                totalGames: 0,
+                bestWpm: 0,
+                averageWpm: 0,
+                averageAccuracy: 0,
+                averageCorrect: 0,
+                averageIncorrect: 0,
+                averageTime: 0,
+                history: [],
+            };
+        }
+
         const bestWpm = Math.max(...history.map(item => item.wpm));
-
-        //average wpm
         const averageWpm = history.reduce((acc, item) => acc + item.wpm, 0) / totalGames;
-
-        //average accuracy
         const averageAccuracy = history.reduce((acc, item) => acc + item.accuracy, 0) / totalGames;
-
-        //average correct
         const averageCorrect = history.reduce((acc, item) => acc + item.correct, 0) / totalGames;
-
-        //average incorrect
         const averageIncorrect = history.reduce((acc, item) => acc + item.incorrect, 0) / totalGames;
-
-        //average time
         const averageTime = history.reduce((acc, item) => acc + item.time, 0) / totalGames;
 
-        const data = {
+        return {
             totalGames,
             bestWpm,
             averageWpm,
@@ -40,14 +46,15 @@ export class HistoryService {
             averageIncorrect,
             averageTime,
             history,
-        }
-
-        return data;
+        };
     }
 
-    add(scoreDTO) {
+    async add(scoreDTO) {
         ScoreValidator.score(scoreDTO);
-        const history = this.historyRepository.add(scoreDTO);
-        return history;
+
+        const currentUser = await this.authService.getCurrentUser();
+        if (!currentUser) throw new Error("Must be logged in to save history");
+
+        return this.historyRepository.add(currentUser.id, scoreDTO);
     }
 }

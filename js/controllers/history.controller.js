@@ -4,8 +4,24 @@ export class HistoryController {
         this.historyService = historyService;
     }
 
-    init() {
-        const data = this.historyService.getRecent();
+    async init() {
+        let data;
+
+        try {
+            data = await this.historyService.getRecent();
+        } catch (error) {
+            this.refs.historyBody.innerHTML = `
+                <div class="history-empty">
+                    <div class="history-empty__icon">🔒</div>
+                    <h3>Login required</h3>
+                    <p>Log in to see your race history.</p>
+                    <a href="/html/auth.html" class="history-empty__button">
+                        Login →
+                    </a>
+                </div>
+            `;
+            return;
+        }
 
         if (!data.history || data.history.length === 0) {
             this.refs.historyBody.innerHTML = `

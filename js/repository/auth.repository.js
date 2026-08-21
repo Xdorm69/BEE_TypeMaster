@@ -10,7 +10,7 @@ export class AuthRepository {
     }
 
     getCurrentUser() {
-        return Store.get(this.storageKey);
+        return Store.get(this.storageKey, null);
     }
 
     clearCurrentUser() {

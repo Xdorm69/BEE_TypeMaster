@@ -175,7 +175,7 @@ export class GameController {
         }
     }
 
-    _handleCharacter(character) {
+    async _handleCharacter(character) {
 
         const state =
             this.gameService.getState();
@@ -226,7 +226,7 @@ export class GameController {
         if (
             this.gameService.isComplete()
         ) {
-            this._finish();
+            await this._finish();
             return;
         }
 
@@ -268,39 +268,42 @@ export class GameController {
         this._updateProgress(state);
     }
 
-    _finish() {
+    async _finish() {
 
         const scoreDTO =
             this.gameService.finish();
 
+        // Compute this before saving, so the new score isn't compared
+        // against itself once it's persisted.
         const isNewHighScore =
-            this._isNewHighScore(
+            await this._isNewHighScore(
                 scoreDTO.getWpm()
             );
 
         try {
-            this.scoreService.create(
+            await this.scoreService.create(
                 scoreDTO
             );
         } catch (error) {
+            // e.g. not logged in - the game still works, it just won't persist.
             console.error("Failed to save score:", error);
         }
 
         try {
-            this.historyService.add(
+            await this.historyService.add(
                 scoreDTO
             );
         } catch (error) {
             console.error("Failed to save history:", error);
         }
 
-        this._renderResults(
+        await this._renderResults(
             scoreDTO,
             isNewHighScore
         );
     }
 
-    _renderResults(
+    async _renderResults(
         scoreDTO,
         isNewHighScore
     ) {
@@ -326,7 +329,7 @@ export class GameController {
             scoreDTO.getIncorrect();
 
         const highScores =
-            this._getHighScores();
+            await this._getHighScores();
 
         const bestScore =
             highScores.find(
@@ -348,10 +351,10 @@ export class GameController {
         this._showResults();
     }
 
-    _isNewHighScore(wpm) {
+    async _isNewHighScore(wpm) {
 
         const highScores =
-            this._getHighScores();
+            await this._getHighScores();
 
         const existingEntry =
             highScores.find(
@@ -369,9 +372,9 @@ export class GameController {
         return wpm > existingEntry.wpm;
     }
 
-    _getHighScores() {
+    async _getHighScores() {
         try {
-            return this.scoreService.getAll();
+            return await this.scoreService.getAll();
         } catch (error) {
             console.error(
                 "Error getting high scores:",

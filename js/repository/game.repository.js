@@ -6,7 +6,7 @@ export class GameRepository {
     }
 
     getAll() {
-        return Store.get(this.storageKey);
+        return Store.get(this.storageKey, []);
     }
     
     save(userId, game) {

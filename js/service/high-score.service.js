@@ -1,20 +1,31 @@
 import { ScoreValidator } from "../validators/score.validator.js";
 
 export class HighScoreService {
-    constructor(repository) {
+    constructor(repository, authService) {
         this.repository = repository;
+        this.authService = authService;
     }
 
-    create(scoreDTO) {
+    async create(scoreDTO) {
         ScoreValidator.score(scoreDTO);
-        return this.repository.save(scoreDTO);
+
+        const currentUser = await this.authService.getCurrentUser();
+        if (!currentUser) throw new Error("Must be logged in to save a high score");
+
+        return this.repository.save(currentUser.id, scoreDTO);
     }
 
-    getAll() {
-        return this.repository.getAll();
+    async getAll() {
+        const currentUser = await this.authService.getCurrentUser();
+        if (!currentUser) return [];
+
+        return this.repository.getByUserId(currentUser.id);
     }
 
-    getBestByParagraphId(paragraphId) {
-        return this.repository.getBestByParagraphId(paragraphId);
+    async getBestByParagraphId(paragraphId) {
+        const currentUser = await this.authService.getCurrentUser();
+        if (!currentUser) return null;
+
+        return this.repository.getBestByParagraphId(currentUser.id, paragraphId);
     }
 }

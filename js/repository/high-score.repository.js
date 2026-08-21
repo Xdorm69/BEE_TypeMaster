@@ -6,66 +6,55 @@ export class HighScoreRepository {
         this.storageKey = "Highscore";
     }
 
+    // model:
+    // [
+    //   { userId: "user123", scores: [ { paragraphId, wpm, ... }, ... ] }
+    // ]
+
     getAll() {
-        return Store.get(this.storageKey);
+        return Store.get(this.storageKey, []);
     }
 
-    save(scoreDTO) {
-        const highscores = this.getAll();
+    getByUserId(userId) {
+        const record = this.getAll().find(r => r.userId === userId);
+        return record ? record.scores : [];
+    }
 
-        const existingIndex = highscores.findIndex(
+    getBestByParagraphId(userId, paragraphId) {
+        const scores = this.getByUserId(userId);
+        return scores.find(score => score.paragraphId === paragraphId) || null;
+    }
+
+    save(userId, scoreDTO) {
+        const all = this.getAll();
+        let record = all.find(r => r.userId === userId);
+
+        if (!record) {
+            record = { userId, scores: [] };
+            all.push(record);
+        }
+
+        const existingIndex = record.scores.findIndex(
             score => score.paragraphId === scoreDTO.paragraphId
         );
 
-        // No score exists for this paragraph yet
+        // No score exists for this paragraph yet for this user
         if (existingIndex === -1) {
-            highscores.push(scoreDTO);
-            Store.save(this.storageKey, highscores);
+            record.scores.push(scoreDTO);
+            Store.save(this.storageKey, all);
             return scoreDTO;
         }
 
-        const existingScore = highscores[existingIndex];
+        const existingScore = record.scores[existingIndex];
 
         // Only keep the better WPM
         if (scoreDTO.wpm > existingScore.wpm) {
-            highscores[existingIndex] = scoreDTO;
-
-            Store.save(this.storageKey, highscores);
-
+            record.scores[existingIndex] = scoreDTO;
+            Store.save(this.storageKey, all);
             return scoreDTO;
         }
 
         // Existing score is already better
         return existingScore;
-    }
-
-    getBestByParagraphId(paragraphId) {
-        return this.getAll().find(
-            score => score.paragraphId === paragraphId
-        ) || null;
-    }
-
-    update(userId, paragraphId, highscoreDTO) {
-        const highscores = this.getAll();
-
-        const userHighscores = highscores.find(
-            highscore => highscore.userId === userId
-        );
-
-        if (!userHighscores) {
-            return null;
-        }
-
-        userHighscores.paragraphs[paragraphId] = highscoreDTO;
-
-        Store.save(this.storageKey, highscores);
-
-        return highscoreDTO;
-    }
-
-    getByUserId(userId) {
-        return this.getAll().find(
-            highscore => highscore.userId === userId
-        ) || null;
     }
 }

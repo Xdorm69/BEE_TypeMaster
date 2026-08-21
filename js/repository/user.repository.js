@@ -7,7 +7,7 @@ export class UserRepository {
     }
     
     getAll() {
-        return Store.get(this.storageKey);
+        return Store.get(this.storageKey, []);
     }
 
     getById(id) {
