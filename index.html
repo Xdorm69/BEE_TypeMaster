@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEE TypeMaster — Typing Speed Trainer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./css/auth.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="brand">
+            <svg class="brand-mark" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <polygon points="17,1 31,9 31,25 17,33 3,25 3,9" />
+                <rect class="stripe" x="3" y="12" width="28" height="3" />
+                <rect class="stripe" x="3" y="19" width="28" height="3" />
+            </svg>
+            <span class="brand-name">Bee<span>Type</span>Master</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="/html/history.html" class="nav-link">History</a>
+            <div class="auth-nav" id="authNav">
+
+                <!-- JS WILL RENDER THIS -->
+
+            </div>
+        </div>
+    </header>
+
+    <main class="game-frame">
+        <div class="stage">
+
+            <div class="difficulty-chip" id="difficultyChip">Easy</div>
+
+            <!-- The typing surface: main.js fills this with one <span> per
+                 character and toggles .correct / .incorrect / .current on them. -->
+            <div class="game" id="gameBody" aria-live="off"></div>
+
+            <p class="game-description" id="gameDescription">Press any key to start the game</p>
+
+            <!-- Signature element: a honeycomb trail that fills as you type,
+                 with a bee marker riding your current position. -->
+            <div class="progress-trail" id="progressTrail" aria-hidden="true">
+                <span class="progress-bee" id="progressBee">🐝</span>
+            </div>
+
+            <div class="stats-strip">
+                <div class="stat">
+                    <span class="stat-value" id="liveWpm">0</span>
+                    <span class="stat-label">WPM</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="liveAccuracy">100%</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="liveErrors">0</span>
+                    <span class="stat-label">Errors</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Results overlay, shown when a paragraph is completed.
+         Replaces the previous alert()-based summary. -->
+    <div class="results-overlay" id="resultsOverlay">
+        <div class="results-card">
+            <p class="results-eyebrow" id="resultsDifficulty">Hive cleared</p>
+            <h2 class="results-title">Run complete</h2>
+
+            <div class="best-score">
+                <span class="best-score-value stat-value" id="resultBestScore">0</span>
+                <p class="best-score-label stat-label">Best Score</p>
+            </div>
+
+            <div class="results-grid">
+                <div class="stat wpm-stat">
+                    <div class="wpm-value">
+                        <span class="stat-value" id="resultWpm">0</span>
+                    </div>
+                    <span class="stat-label">WPM</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="resultAccuracy">0%</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="resultCorrect">0</span>
+                    <span class="stat-label">Correct</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="resultIncorrect">0</span>
+                    <span class="stat-label">Incorrect</span>
+                </div>
+            </div>
+
+            <div class="results-actions">
+                <button class="btn btn-primary" id="nextRunBtn">Next hive</button>
+            </div>
+        </div>
+    </div>     
+
+    <script type='module' src="./js/main.js"></script>
+</body>
+</html>
