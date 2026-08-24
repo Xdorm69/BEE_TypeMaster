@@ -1,6 +1,5 @@
 export const DEMO_TEXTS = [
 
-    // REAL DATA 
     { id: 0, difficulty: "Easy", text: "This is BEE Type Master, Our Frontend Project For 5th Semester." },
 
     { id: 1, difficulty: "Easy", text: "Fox Jumps Over The Big Black Tree." },
@@ -56,4 +55,5 @@ export const DEMO_TEXTS = [
     { id: 26, difficulty: "Expert", text: "Perhaps the strangest thing about memories is how unreliable they can be. We remember the sound of someone's laughter, the smell of rain on an empty street, or the warmth of an old summer evening; yet the details we once considered unforgettable slowly disappear." },
 
     { id: 27, difficulty: "Expert", text: "Everyone wanted an answer, but nobody wanted to hear the truth. The room grew increasingly silent as the evidence was placed on the table, one piece at a time. Finally, he looked up, smiled faintly, and said, \"Well, this is certainly not how I expected tonight to go.\" " },
+
 ];

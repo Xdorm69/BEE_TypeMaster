@@ -1,26 +1,29 @@
 export class AuthUIController {
-  constructor(refs, authService) {
-    this.refs = refs;
-    this.authService = authService;
-  }
 
-  async init() {
-    await this.render();
-  }
-
-  async render() {
-    const user = await this.authService.getCurrentUser();
-
-    if (!user) {
-      this.renderLoggedOut();
-      return;
+    constructor(refs, authService) {
+        this.refs = refs;
+        this.authService = authService;
     }
 
-    this.renderLoggedIn(user);
-  }
+    async init() {
+        await this.render();
+    }
 
-  renderLoggedOut() {
-    this.refs.authNav.innerHTML = `
+    async render() {
+        const user =
+             await this.authService.getCurrentUser();
+
+
+        if (!user) {
+            this.renderLoggedOut();
+            return;
+        }
+
+        this.renderLoggedIn(user);
+    }
+
+    renderLoggedOut() {
+        this.refs.authNav.innerHTML = `
             <a
                 href="/html/auth.html"
                 class="nav-link"
@@ -28,12 +31,15 @@ export class AuthUIController {
                 Login
             </a>
         `;
-  }
+    }
 
-  renderLoggedIn(user) {
-    const avatar = user.avatarUrl || "../assets/default-avatar.png";
+    renderLoggedIn(user) {
 
-    this.refs.authNav.innerHTML = `
+        const avatar =
+            user.avatarUrl ||
+            "../assets/default-avatar.png";
+
+        this.refs.authNav.innerHTML = `
             <div class="user-menu">
 
                 <img
@@ -57,14 +63,18 @@ export class AuthUIController {
             </div>
         `;
 
-    this.refs.logoutButton = document.getElementById("logoutButton");
+        this.refs.logoutButton =
+            document.getElementById("logoutButton");
 
-    this.refs.logoutButton.addEventListener("click", () => this.handleLogout());
-  }
+        this.refs.logoutButton.addEventListener(
+            "click",
+            () => this.handleLogout()
+        );
+    }
 
-  async handleLogout() {
-    await this.authService.logout();
+    async handleLogout() {
+        await this.authService.logout();
 
-    this.render();
-  }
+        this.render();
+    }
 }
