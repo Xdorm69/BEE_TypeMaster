@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEE TypeMaster — Leaderboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/leaderboard.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="brand">
+            <svg class="brand-mark" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <polygon points="17,1 31,9 31,25 17,33 3,25 3,9" />
+                <rect class="stripe" x="3" y="12" width="28" height="3" />
+                <rect class="stripe" x="3" y="19" width="28" height="3" />
+            </svg>
+            <span class="brand-name">Bee<span>Type</span>Master</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="/index.html" class="nav-link">Play</a>
+            <a href="/html/history.html" class="nav-link">History</a>
+            <div class="auth-nav" id="authNav">
+                <!-- JS WILL RENDER THIS -->
+            </div>
+        </div>
+    </header>
+
+    <main class="leaderboard-container">
+        <!-- BACK BUTTON -->
+        <a href="/index.html" class="back-button">← Back to Home</a>
+
+        <!-- LEADERBOARD CONTENT -->
+        <div class="leaderboard-content">
+            <h2 class="title">Leaderboard</h2>
+            <p class="description">The fastest bees in the hive, ranked by best WPM.</p>
+
+            <div class="leaderboard-tabs" id="leaderboardTabs">
+                <!-- JS WILL RENDER DIFFICULTY TABS HERE -->
+            </div>
+
+            <div class="my-rank" id="myRank">
+                <!-- JS WILL RENDER THE CURRENT USER'S RANK HERE -->
+            </div>
+
+            <div class="body" id="leaderboardBody">
+                <!-- JS WILL RENDER PODIUM + TABLE HERE -->
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="../js/leaderboard.js"></script>
+</body>
+</html>
