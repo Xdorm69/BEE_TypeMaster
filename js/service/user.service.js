@@ -1,6 +1,7 @@
 import { Generator } from "../utils/generator.js";
 import { UserValidator } from "../validators/user.validator.js";
 
+
 export class UserService {    
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -50,5 +51,13 @@ export class UserService {
         }
 
         return this.userRepository.getByEmail(email);
+    }
+
+    async getByUsername(username) {
+        if (!username) {
+            throw new Error("Username is required");
+        }
+
+        return this.userRepository.getByUsername(username);
     }
 }

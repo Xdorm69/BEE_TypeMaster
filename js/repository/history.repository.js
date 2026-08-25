@@ -1,5 +1,28 @@
 import { Store } from "../utils/store.js";
 
+/*
+    CURRENT MODEL
+    [
+        {
+            userId: "user123",
+            history: [
+                { wpm: 120, accuracy: 95, time: 120, date: "2025-10-14T12:00:00Z" }
+            ]
+        }
+    ]
+    
+    NEW MODEL
+    {
+        "user123": {
+            "para123": {
+                wpm: 120,
+                accuracy: 95,
+                time: 120,
+                date: "2025-10-14T12:00:00Z"
+            }
+        }
+    }
+*/
 export class HistoryRepository {
     constructor() {
         this.storageKey = "History";

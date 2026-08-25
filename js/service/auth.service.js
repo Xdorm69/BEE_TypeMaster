@@ -35,7 +35,14 @@ export class AuthService {
             await this.userService.getByEmail(userDTO.email);
 
         if (existingUser) {
-            throw new Error("User already exists");
+            throw new Error("User with this email already exists");
+        }
+
+        const existingUserByUsername =
+            await this.userService.getByUsername(userDTO.username);
+
+        if (existingUserByUsername) {
+            throw new Error("User with this username already exists");
         }
 
         const user =

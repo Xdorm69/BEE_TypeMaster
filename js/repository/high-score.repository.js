@@ -1,5 +1,31 @@
 import { Store } from "../utils/store.js";
 
+/*
+    CURRENT MODEL
+    [
+        {
+            userId: "user123",
+            scores: [
+                {
+                    paragraphId: "para123",
+                    wpm: 120,
+                    ...
+                }
+            ]
+        }
+    ]
+    
+    NEW MODEL
+    {
+        "user123": {
+            "para123": {
+                paragraphId: "para123",
+                wpm: 120,
+                ...
+            }
+        }
+    }
+*/
 export class HighScoreRepository {
 
     constructor() {

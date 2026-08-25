@@ -6,8 +6,6 @@ import { UserRepository } from "./repository/user.repository.js";
 import { AuthService } from "./service/auth.service.js";
 import { UserService } from "./service/user.service.js";
 
-
-
 const refs = {
     authForm: document.getElementById("authForm"),
 
